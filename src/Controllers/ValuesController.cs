@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,21 @@ namespace src.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private HttpClient myClient;
+
+        public ValuesController(HttpClient client)
+        {
+            myClient = client;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            string googleResponse = myClient.GetStringAsync("http://google.com")
+                .GetAwaiter().GetResult();
+
+            return new string[] { googleResponse };
         }
 
         // GET api/values/5
