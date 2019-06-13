@@ -4,6 +4,7 @@ namespace src.Logic
     public class Counter
     {
         private int counter;
+        private static object dummyObject = new object();
 
         private Counter()
         {
@@ -13,12 +14,15 @@ namespace src.Logic
         private static Counter theInstance;
         public static Counter Instance()
         {
-            if(theInstance == null)
+            lock (dummyObject)
             {
-                theInstance = new Counter();
-            }
+                if (theInstance == null)
+                {
+                    theInstance = new Counter();
+                }
 
-            return theInstance;
+                return theInstance;
+            }
         }
 
         public int Increment()
